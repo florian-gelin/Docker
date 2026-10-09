@@ -1,8 +1,4 @@
 # ===== ALIAS DOCKER =====
-# Bloc à ajouter dans ~/.bashrc, puis : source ~/.bashrc
-# Les commandes passent par sudo car l'utilisateur n'est pas dans le groupe docker.
-# Les arguments tapés après un alias sont ajoutés à la fin de la commande.
-# Liste des raccourcis : dhelp
 
 # --- Conteneurs ---
 alias dps='sudo docker ps'
