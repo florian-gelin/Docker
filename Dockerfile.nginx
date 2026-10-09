@@ -1,0 +1,17 @@
+FROM debian:bookworm-slim
+ 
+LABEL description="nginx installé avec apt sur Debian slim"
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nginx \
+    && rm -rf /var/lib/apt/lists/*
+ 
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log \
+    && sed -i '/listen \[::\]:80/d' /etc/nginx/sites-enabled/default
+ 
+RUN echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>nginx maison</title></head><body style="font-family:Comic Sans MS;text-align:center;margin-top:20vh"><h1>Florian GELIN</h1></body></html>' > /var/www/html/index.html
+ 
+EXPOSE 80
+ 
+CMD ["nginx", "-g", "daemon off;"]
