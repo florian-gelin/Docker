@@ -1,23 +1,17 @@
-# Dockerfile : image SSH construite à partir de Debian slim (pas d'image SSH existante)
-
 FROM debian:bookworm-slim
 
 LABEL description="Serveur SSH (openssh-server) sur Debian slim"
 
-# 1) Installer le serveur SSH
 RUN apt-get update \
     && apt-get install -y --no-install-recommends openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
-# 2) Compte root / mot de passe root123, connexion root par mot de passe autorisée
 RUN echo "root:root123" | chpasswd \
     && mkdir -p /run/sshd \
     && ssh-keygen -A \
     && sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
-# Port d'écoute SSH dans le conteneur (la redirection se fait avec -p au lancement)
 EXPOSE 22
 
-# Lancer sshd au premier plan (-D) et envoyer ses logs vers docker logs (-e)
 CMD ["/usr/sbin/sshd", "-D", "-e"]
